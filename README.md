@@ -11,6 +11,13 @@
 
 link uml diagrams: https://lucid.app/lucidchart/5d4fabe1-c16f-4353-b877-1f1fa4a3f847/edit?viewport_loc=-4363%2C-1797%2C10358%2C4188%2C0m8xT1A-z0s.&invitationId=inv_bbe5bf6e-1e22-4480-a804-d33e2b081425
 
+
+
+![Classi UML](svg/class.svg)
+
+![Stati UML](svg/state.svg)
+
+
 ## Setup and Build
 
 The project has been tested and has native support for the following `i2c` displays:
