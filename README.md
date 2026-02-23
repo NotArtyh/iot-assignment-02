@@ -13,9 +13,9 @@ link uml diagrams: https://lucid.app/lucidchart/5d4fabe1-c16f-4353-b877-1f1fa4a3
 
 
 
-![Classi UML](svg/class.svg)
+![Classi UML](svg/class-bg.svg)
 
-![Stati UML](svg/state.svg)
+![Stati UML](svg/state-bg.svg)
 
 
 ## Setup and Build
