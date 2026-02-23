@@ -16,7 +16,7 @@ enum
   OFF
 } state;
 
-//QUI SI INIZIALIZZANO SOLO I VARI OGGETTI E LO STATO INIZIALE
+// QUI SI INIZIALIZZANO SOLO I VARI OGGETTI E LO STATO INIZIALE
 void setup()
 {
   Serial.begin(9600);
@@ -52,7 +52,7 @@ void step()
   }
 }
 
-//QUESTO DEVE RIMANERE COSI
+// QUESTO DEVE RIMANERE COSI
 void loop()
 {
   timer.waitForNextTick();
