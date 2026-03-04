@@ -8,32 +8,36 @@
 #include "devices/ServoMotorImpl.h"
 #include "kernel/Logger.h"
 
-void wakeUp(){}
+void wakeUp() {}
 
-HWPlatform::HWPlatform(){
+HWPlatform::HWPlatform()
+{
   pButton = new ButtonImpl(BT_PIN);
   pLed = new Led(LED_PIN);
   pMotor = new ServoMotorImpl(MOTOR_PIN);
 }
 
-
-void HWPlatform::init(){
+void HWPlatform::init()
+{
 }
 
-Button* HWPlatform::getButton(){
+Button *HWPlatform::getButton()
+{
   return this->pButton;
 }
 
-
-Led*  HWPlatform::getLed(){
+Led *HWPlatform::getLed()
+{
   return this->pLed;
 }
 
-ServoMotor* HWPlatform::getMotor(){
+ServoMotor *HWPlatform::getMotor()
+{
   return this->pMotor;
 }
 
-void HWPlatform::test(){
+void HWPlatform::test()
+{
   bool btPressed = pButton->isPressed();
   pLed->switchOn();
   pMotor->on();
@@ -45,4 +49,3 @@ void HWPlatform::test(){
   pMotor->off();
   pLed->switchOff();
 }
-

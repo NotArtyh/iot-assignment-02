@@ -2,10 +2,11 @@
 #define __SERVO_MOTOR_IMPL__
 
 #include "ServoMotor.h"
-#include <arduino.h>
+#include <Arduino.h>
 #include "ServoTimer2.h"
 
-class ServoMotorImpl: public ServoMotor {
+class ServoMotorImpl : public ServoMotor
+{
 
 public:
   ServoMotorImpl(int pin);
@@ -14,11 +15,11 @@ public:
   bool isOn();
   void setPosition(int angle);
   void off();
-    
+
 private:
-  int pin; 
+  int pin;
   bool _on;
-  ServoTimer2 motor; 
+  ServoTimer2 motor;
 };
 
 #endif
