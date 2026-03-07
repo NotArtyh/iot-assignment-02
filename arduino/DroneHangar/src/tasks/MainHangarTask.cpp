@@ -121,9 +121,9 @@ void MainHangarTask::tick()
     }
 }
 
-void MainHangarTask::setState(int s)
+void MainHangarTask::setState(HangarState newState)
 {
-    state = s;
+    state = newState;
     stateTimestamp = millis();
     justEntered = true;
 }

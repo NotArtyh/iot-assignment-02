@@ -4,7 +4,7 @@
 #include "config.h"
 #include "devices/Led.h"
 #include "devices/DisplayLcd.h"
-#include "devices/ServoMotorImpl.h"
+#include "devices/HangarDoor.h"
 #include "devices/ButtonImpl.h"
 #include "devices/Sonar.h"
 #include "devices/Pir.h"
@@ -22,7 +22,7 @@ HangarPlatform::HangarPlatform()
   pSonar = new Sonar(SONAR_ECHO_PIN, SONAR_TRIG_PIN, SONAR_TIMEOUT);
   pPir = new Pir(PIR_PIN);
   pLcd = new DisplayLcd(LCD_I2C_ADDRESS, LCD_COLS, LCD_ROWS);
-  pMotor = new ServoMotorImpl(MOTOR_PIN);
+  pHangarDoor = new HangarDoor(MOTOR_PIN);
   pTempSensor = new TempSensor(TEMP_SENSOR_PIN);
 }
 
@@ -30,7 +30,6 @@ void HangarPlatform::init()
 {
   pLcd->init();
   pSonar->setTemperature(pTempSensor->getTemperature()); // oppure teniamo 20° di default, ma così è più realistico
-  pMotor->on();
   Logger.log("HangarPlatform initialized");
 }
 
@@ -54,9 +53,9 @@ Led *HangarPlatform::getAlarmLed()
   return this->pAlarmLed;
 }
 
-ServoMotorImpl *HangarPlatform::getMotor()
+HangarDoor *HangarPlatform::getHangarDoor()
 {
-  return this->pMotor;
+  return this->pHangarDoor;
 }
 
 Sonar *HangarPlatform::getSonar()

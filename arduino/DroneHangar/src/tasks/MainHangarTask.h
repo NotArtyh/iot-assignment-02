@@ -1,14 +1,15 @@
 #ifndef __MAIN_HANGAR_TASK__
 #define __MAIN_HANGAR_TASK__
 
+#include <Arduino.h>
 #include "kernel/Task.h"
+#include "model/Context.h"
+
 #include "devices/PresenceSensor.h"
 #include "devices/ProximitySensor.h"
 #include "devices/DisplayLcd.h"
 #include "devices/Led.h"
 #include "devices/HangarDoor.h"
-#include "model/Context.h"
-#include <Arduino.h>
 
 class MainHangarTask : public Task
 {
@@ -18,19 +19,22 @@ public:
   void tick();
 
 private:
-  void setState(int state);
-  long elapsedTimeInState();
-  void log(const String &msg);
-
-  bool checkAndSetJustEntered();
-
-  enum
+  enum HangarState
   {
     IDLE_INSIDE,
     TAKING_OFF,
     OUTSIDE,
     LANDING
-  } state;
+  };
+
+  void setState(HangarState newState);
+  long elapsedTimeInState();
+  void log(const String &msg);
+
+  bool checkAndSetJustEntered();
+
+  HangarState state;
+
   long stateTimestamp;
   bool justEntered;
 
