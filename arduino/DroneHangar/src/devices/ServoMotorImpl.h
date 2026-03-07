@@ -7,7 +7,6 @@
 
 class ServoMotorImpl : public ServoMotor
 {
-
 public:
   ServoMotorImpl(int pin);
 
