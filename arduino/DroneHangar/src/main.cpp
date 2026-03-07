@@ -1,9 +1,12 @@
 #include <Arduino.h>
 #include "config.h"
+
 #include "kernel/Scheduler.h"
 #include "kernel/Logger.h"
 #include "kernel/MsgService.h"
+
 #include "model/HangarPlatform.h"
+
 #include "tasks/MainHangarTask.h"
 #include "tasks/BlinkingLedTask.h"
 #include "tasks/TemperatureAlarmTask.h"
@@ -28,12 +31,12 @@ void setup()
 #ifndef __TESTING_HW__
   pContext = new Context();
 
-  Task *MainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getMotor(), pContext);
-  MainHangarTask->init(50);
+  Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getMotor(), pContext);
+  pMainHangarTask->init(50);
   /* Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
   pBlinkingTask->init(100); */
 
-  sched.addTask(MainHangarTask);
+  sched.addTask(pMainHangarTask);
   // sched.addTask(pBlinkingTask);
 #endif
 }

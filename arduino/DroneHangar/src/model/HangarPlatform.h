@@ -4,7 +4,7 @@
 #include "config.h"
 #include "devices/Button.h"
 #include "devices/Led.h"
-#include "devices/ServoMotor.h"
+#include "devices/ServoMotorImpl.h"
 #include "devices/Sonar.h"
 #include "devices/Pir.h"
 #include "devices/DisplayLcd.h"
@@ -21,11 +21,10 @@ public:
   Led *getStaticLed();
   Led *getActionLed();
   Led *getAlarmLed();
-  ServoMotor *getMotor();
+  ServoMotorImpl *getMotor();
   Sonar *getSonar();
   Pir *getPir();
   DisplayLcd *getLcd();
-  ServoMotor *getMotor();
   TempSensor *getTempSensor();
 
 private:
@@ -33,11 +32,10 @@ private:
   Led *pStaticLed;
   Led *pActionLed;
   Led *pAlarmLed;
-  ServoMotor *pMotor;
+  ServoMotorImpl *pMotor;
   Sonar *pSonar;
   Pir *pPir;
   DisplayLcd *pLcd;
-  ServoMotor *pMotor;
   TempSensor *pTempSensor;
 };
 

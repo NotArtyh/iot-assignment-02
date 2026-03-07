@@ -6,7 +6,7 @@
 class HangarDoor
 {
 public:
-    HangarDoor(int pin);
+    HangarDoor(ServoMotorImpl *servo);
 
     void open();
     void close();

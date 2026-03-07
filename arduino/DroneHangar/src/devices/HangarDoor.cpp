@@ -1,10 +1,9 @@
 #include "HangarDoor.h"
 #include "ServoMotorImpl.h"
 
-HangarDoor::HangarDoor(int pin)
+HangarDoor::HangarDoor(ServoMotorImpl *servo)
 {
-
-    servo = new ServoMotorImpl(pin);
+    this->servo = servo;
     _isOpen = false;
     close();
 }

@@ -54,7 +54,7 @@ Led *HangarPlatform::getAlarmLed()
   return this->pAlarmLed;
 }
 
-ServoMotor *HangarPlatform::getMotor()
+ServoMotorImpl *HangarPlatform::getMotor()
 {
   return this->pMotor;
 }
@@ -72,7 +72,7 @@ DisplayLcd *HangarPlatform::getLcd()
   return this->pLcd;
 }
 
-ServoMotor *HangarPlatform::getMotor()
+TempSensor *HangarPlatform::getTempSensor()
 {
-  return this->pMotor;
+  return this->pTempSensor;
 }
