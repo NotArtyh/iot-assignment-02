@@ -1,20 +1,25 @@
 #ifndef __HANGAR_DOOR__
 #define __HANGAR_DOOR__
 
-#include "ServoMotor.h"
+#include <Arduino.h>
+#include "ServoTimer2.h"
 
 class HangarDoor
 {
 public:
-    HangarDoor(ServoMotorImpl *servo);
+    HangarDoor(int pin);
 
     void open();
     void close();
     bool isOpen();
 
 private:
+    int _pin;
     bool _isOpen;
-    ServoMotor *servo;
+    ServoTimer2 motor;
+
+    // Funzione privata per gestire la conversione dell'angolo
+    void setAngle(int angle);
 };
 
 #endif
