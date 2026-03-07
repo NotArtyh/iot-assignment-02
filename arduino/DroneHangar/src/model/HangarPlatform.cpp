@@ -1,0 +1,78 @@
+#include "HangarPlatform.h"
+#include <Arduino.h>
+#include "kernel/MsgService.h"
+#include "config.h"
+#include "devices/Led.h"
+#include "devices/DisplayLcd.h"
+#include "devices/ServoMotorImpl.h"
+#include "devices/ButtonImpl.h"
+#include "devices/Sonar.h"
+#include "devices/Pir.h"
+#include "devices/TempSensor.h"
+#include "kernel/Logger.h"
+
+void wakeUp() {}
+
+HangarPlatform::HangarPlatform()
+{
+  pButton = new ButtonImpl(BT_PIN);
+  pStaticLed = new Led(LED_PIN1);
+  pActionLed = new Led(LED_PIN2);
+  pAlarmLed = new Led(LED_PIN3);
+  pSonar = new Sonar(SONAR_ECHO_PIN, SONAR_TRIG_PIN, SONAR_TIMEOUT);
+  pPir = new Pir(PIR_PIN);
+  pLcd = new DisplayLcd(LCD_I2C_ADDRESS, LCD_COLS, LCD_ROWS);
+  pMotor = new ServoMotorImpl(MOTOR_PIN);
+  pTempSensor = new TempSensor(TEMP_SENSOR_PIN);
+}
+
+void HangarPlatform::init()
+{
+  pLcd->init();
+  pSonar->setTemperature(pTempSensor->getTemperature()); // oppure teniamo 20° di default, ma così è più realistico
+  pMotor->on();
+  Logger.log("HangarPlatform initialized");
+}
+
+Button *HangarPlatform::getButton()
+{
+  return this->pButton;
+}
+
+Led *HangarPlatform::getStaticLed()
+{
+  return this->pStaticLed;
+}
+
+Led *HangarPlatform::getActionLed()
+{
+  return this->pActionLed;
+}
+
+Led *HangarPlatform::getAlarmLed()
+{
+  return this->pAlarmLed;
+}
+
+ServoMotor *HangarPlatform::getMotor()
+{
+  return this->pMotor;
+}
+
+Sonar *HangarPlatform::getSonar()
+{
+  return this->pSonar;
+}
+Pir *HangarPlatform::getPir()
+{
+  return this->pPir;
+}
+DisplayLcd *HangarPlatform::getLcd()
+{
+  return this->pLcd;
+}
+
+ServoMotor *HangarPlatform::getMotor()
+{
+  return this->pMotor;
+}
