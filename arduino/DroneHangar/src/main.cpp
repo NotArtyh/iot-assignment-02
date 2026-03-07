@@ -3,16 +3,16 @@
 #include "kernel/Scheduler.h"
 #include "kernel/Logger.h"
 #include "kernel/MsgService.h"
-#include "model/HWPlatform.h"
-#include "tasks/TestHWTask.h"
-#include "tasks/SweepingTask.h"
-#include "tasks/BlinkingTask.h"
+#include "model/HangarPlatform.h"
+#include "tasks/MainHangarTask.h"
+#include "tasks/BlinkingLedTask.h"
+#include "tasks/TemperatureAlarmTask.h"
 
 // #define __TESTING_HW__
 
 Scheduler sched;
 
-HWPlatform *pHWPlatform;
+HangarPlatform *pHangarPlatform;
 Context *pContext;
 
 void setup()
@@ -22,27 +22,19 @@ void setup()
 
   Logger.log("Starting Drone Hangar...");
 
-  pHWPlatform = new HWPlatform();
-  pHWPlatform->init();
+  pHangarPlatform = new HangarPlatform();
+  pHangarPlatform->init();
 
 #ifndef __TESTING_HW__
   pContext = new Context();
 
-  Task *pSweepingTask = new SweepingTask(pHWPlatform->getButton(), pHWPlatform->getMotor(), pContext);
-  pSweepingTask->init(50);
+  Task *MainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getMotor(), pContext);
+  MainHangarTask->init(50);
+  /* Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
+  pBlinkingTask->init(100); */
 
-  Task *pBlinkingTask = new BlinkingTask(pHWPlatform->getLed(), pContext);
-  pBlinkingTask->init(100);
-
-  sched.addTask(pSweepingTask);
-  sched.addTask(pBlinkingTask);
-#endif
-
-#ifdef __TESTING_HW__
-  /* Testing */
-  Task *pTestHWTask = new TestHWTask(pHWPlatform);
-  pTestHWTask->init(2000);
-  sched.addTask(pTestHWTask);
+  sched.addTask(MainHangarTask);
+  // sched.addTask(pBlinkingTask);
 #endif
 }
 
