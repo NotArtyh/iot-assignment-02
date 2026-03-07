@@ -35,9 +35,11 @@ void setup()
   pMainHangarTask->init(50);
   /* Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
   pBlinkingTask->init(100); */
+  /*Task *pTemperatureAlarmTask = new TemperatureAlarmTask();*/
 
   sched.addTask(pMainHangarTask);
   // sched.addTask(pBlinkingTask);
+  // sched.addTask(pTemperatureAlarmTask());
 #endif
 }
 
