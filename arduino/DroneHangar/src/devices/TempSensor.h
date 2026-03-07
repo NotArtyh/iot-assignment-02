@@ -1,13 +1,16 @@
-#ifndef __TEMP_SENSOR__
-#define __TEMP_SENSOR__
+#ifndef TEMP_SENSOR_H
+#define TEMP_SENSOR_H
 
-class TempSensor {
+#include <Arduino.h>
+
+class TempSensor
+{
+private:
+    int pin;
 
 public:
-  virtual float getTemperature() = 0;
-  
+    TempSensor(int pin);
+    float getTemperature();
 };
 
-
 #endif
-
