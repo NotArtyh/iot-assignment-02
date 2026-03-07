@@ -12,25 +12,26 @@
 
 Scheduler sched;
 
-HWPlatform* pHWPlatform;
-Context* pContext;
+HWPlatform *pHWPlatform;
+Context *pContext;
 
-void setup() {
+void setup()
+{
   MsgService.init();
   sched.init(50);
 
-  Logger.log(":::::: Sweeping System ::::::");
-  
+  Logger.log("Starting Drone Hangar...");
+
   pHWPlatform = new HWPlatform();
   pHWPlatform->init();
 
 #ifndef __TESTING_HW__
   pContext = new Context();
 
-  Task* pSweepingTask = new SweepingTask(pHWPlatform->getButton(), pHWPlatform->getMotor(), pContext);
+  Task *pSweepingTask = new SweepingTask(pHWPlatform->getButton(), pHWPlatform->getMotor(), pContext);
   pSweepingTask->init(50);
 
-  Task* pBlinkingTask = new BlinkingTask(pHWPlatform->getLed(), pContext);
+  Task *pBlinkingTask = new BlinkingTask(pHWPlatform->getLed(), pContext);
   pBlinkingTask->init(100);
 
   sched.addTask(pSweepingTask);
@@ -39,12 +40,13 @@ void setup() {
 
 #ifdef __TESTING_HW__
   /* Testing */
-  Task* pTestHWTask = new TestHWTask(pHWPlatform);
+  Task *pTestHWTask = new TestHWTask(pHWPlatform);
   pTestHWTask->init(2000);
   sched.addTask(pTestHWTask);
 #endif
 }
 
-void loop() {
-    sched.schedule();
+void loop()
+{
+  sched.schedule();
 }
