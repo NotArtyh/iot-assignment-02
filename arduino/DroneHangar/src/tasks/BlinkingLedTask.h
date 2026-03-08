@@ -10,7 +10,7 @@ class BlinkingTask : public Task
 {
 
 public:
-  BlinkingTask(Led *pLed, Context *pContext);
+  BlinkingTask(Led *pActionLed, Context *pContext);
   void tick();
 
 private:

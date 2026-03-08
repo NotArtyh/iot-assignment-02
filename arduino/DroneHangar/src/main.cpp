@@ -33,8 +33,8 @@ void setup()
 
   Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getHangarDoor(), pContext);
   pMainHangarTask->init(50);
-  /* Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
-  pBlinkingTask->init(100); */
+  Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
+  pBlinkingLedTask->init(100);
   /*Task *pTemperatureAlarmTask = new TemperatureAlarmTask();*/
 
   sched.addTask(pMainHangarTask);
