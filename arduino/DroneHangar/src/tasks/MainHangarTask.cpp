@@ -4,8 +4,9 @@
 #include "kernel/Logger.h"
 
 #define T1 3000
-#define BWD_ME 1000
-#define START_TIME 100
+#define T2 4000
+#define TAKE_OFF_DISTANCE 100
+#define LANDING_DISTANCE 200
 #define RESET_TIME 500
 
 MainHangarTask::MainHangarTask(PresenceSensor *pPresenceSensor, ProximitySensor *pProximitySensor,
@@ -17,7 +18,9 @@ MainHangarTask::MainHangarTask(PresenceSensor *pPresenceSensor, ProximitySensor 
     this->pStaticLed = pStaticLed;
     this->pHangarDoor = pHangarDoor;
     this->pContext = pContext;
-    setState(IDLE_INSIDE);
+
+    this->conditionStartTime = 0;
+    setState(IDLE_INSIDE); // initial state
 }
 
 void MainHangarTask::tick()
@@ -29,16 +32,16 @@ void MainHangarTask::tick()
         if (this->checkAndSetJustEntered())
         {
             Logger.log(F("[MHT] IDLE_INSIDE"));
-            if (pHangarDoor->isOpen())
-            {
-                pHangarDoor->close();
-                Logger.log(F("[MHT] DOOR CLOSED"));
-            }
+            closeDoorIfOpen();
             pStaticLed->switchOn();
             Logger.log(F("[LED] ON"));
             pDisplay->showMessage("DRONE INSIDE");
-            Logger.log(F("[LCD] DRONE INSIDE"));
         }
+        // Transition condition: take-off command received and no alarm
+        /* if (takeOffCommandReceived() && !isAlarming())
+        {
+            setState(TAKING_OFF);
+        } */
 
         break;
     }
@@ -47,77 +50,89 @@ void MainHangarTask::tick()
         if (this->checkAndSetJustEntered())
         {
             Logger.log(F("[MHT] TAKING_OFF"));
-            if (!pHangarDoor->isOpen())
-            {
-                pHangarDoor->open();
-                Logger.log(F("[MHT] DOOR OPENED"));
-            }
+            openDoorIfClosed();
             pDisplay->showMessage("TAKING OFF");
-            Logger.log(F("[LCD] TAKING OFF"));
+            // AZZERA il timer SOLO quando entri in questo stato per la prima volta
+            conditionStartTime = 0;
         }
 
+        // LED2 BLINKING
+
+        // Transition condition: drone has taken off
+        float currentDistance = pProximitySensor->getDistance();
+        if (currentDistance > TAKE_OFF_DISTANCE)
+        {
+            // Se supera la soglia per la prima volta, fai partire il cronometro
+            if (conditionStartTime == 0)
+            {
+                conditionStartTime = millis();
+            }
+            // Se è sopra la soglia e il tempo T1 è trascorso
+            else if (millis() - conditionStartTime >= T1)
+            {
+                Logger.log(F("[MHT] Drone departed. Moving to OUTSIDE."));
+                setState(OUTSIDE);
+            }
+        }
+        else
+        {
+            // Se la distanza scende sotto TAKE_OFF_DISTANCE prima dello scadere di T1, azzera tutto
+            conditionStartTime = 0;
+        }
         break;
     }
-        /* case SWEEPING_BWD:
+    case OUTSIDE:
+    {
+        if (this->checkAndSetJustEntered())
         {
-            if (this->checkAndSetJustEntered())
-            {
-                Logger.log(F("[SWT] SWEEPING_BWD"));
-            }
-
-            long dt = elapsedTimeInState();
-            currentPos = (((float)dt) / BWD_TIME) * 180;
-            pMotor->setPosition(currentPos);
-
-            if (pButton->isPressed())
-            {
-                Logger.log(F("[SWT] STOPPED!"));
-                pContext->setStopped();
-                toBeStopped = true;
-            }
-
-            if (dt > BWD_TIME)
-            {
-                if (!toBeStopped)
-                {
-                    setState(SWEEPING_FWD);
-                }
-                else
-                {
-                    setState(RESETTING);
-                }
-            }
-            break;
+            Logger.log(F("[MHT] OUTSIDE"));
+            closeDoorIfOpen();
+            pDisplay->showMessage("DRONE OUTSIDE");
         }
-        case STARTING:
+
+        // LED2 OFF
+
+        // Transition condition: drone is landingand no alarm
+
+        /* if (landingCommandReceived() && !isAlarming() && pPresenceSensor->isDetected())
         {
-            if (this->checkAndSetJustEntered())
-            {
-                Logger.log(F("[SWT] STARTING"));
-            }
-            if (elapsedTimeInState() > START_TIME)
-            {
-                pContext->setStarted();
-                pMotor->on();
-                currentPos = 0;
-                toBeStopped = false;
-                setState(SWEEPING_FWD);
-            }
-            break;
-        }
-        case RESETTING:
-        {
-            if (this->checkAndSetJustEntered())
-            {
-                Logger.log(F("[SWT] RESETTING"));
-            }
-            pMotor->setPosition(0);
-            if (elapsedTimeInState() > RESET_TIME)
-            {
-                pMotor->off();
-                setState(IDLE);
-            }
+            setState(LANDING);
         } */
+        break;
+    }
+    case LANDING:
+    {
+        if (this->checkAndSetJustEntered())
+        {
+            Logger.log(F("[MHT] LANDING"));
+            openDoorIfClosed();
+            pDisplay->showMessage("LANDING");
+            conditionStartTime = 0;
+        }
+        // led2 blinking
+
+        // Transition condition: drone has landed
+        float currentDistance = pProximitySensor->getDistance();
+        if (currentDistance < LANDING_DISTANCE)
+        {
+            // Se supera la soglia per la prima volta, fai partire il cronometro
+            if (conditionStartTime == 0)
+            {
+                conditionStartTime = millis();
+            }
+            else if (millis() - conditionStartTime >= T2)
+            {
+                Logger.log(F("[MHT] Drone landed. Moving to IDLE_INSIDE."));
+                setState(IDLE_INSIDE);
+            }
+        }
+        else
+        {
+            // Se la distanza scende sotto LANDING_DISTANCE prima dello scadere di T2, azzera tutto
+            conditionStartTime = 0;
+        }
+        break;
+    }
     }
 }
 
@@ -141,4 +156,23 @@ bool MainHangarTask::checkAndSetJustEntered()
         justEntered = false;
     }
     return bak;
+}
+
+// Utility functions to manage the door
+void MainHangarTask::closeDoorIfOpen()
+{
+    if (pHangarDoor->isOpen())
+    {
+        pHangarDoor->close();
+        Logger.log(F("[MHT] DOOR CLOSED"));
+    }
+}
+
+void MainHangarTask::openDoorIfClosed()
+{
+    if (!pHangarDoor->isOpen())
+    {
+        pHangarDoor->open();
+        Logger.log(F("[MHT] DOOR OPENED"));
+    }
 }

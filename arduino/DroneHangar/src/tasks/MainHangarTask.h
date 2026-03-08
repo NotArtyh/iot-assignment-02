@@ -32,11 +32,14 @@ private:
   void log(const String &msg);
 
   bool checkAndSetJustEntered();
+  void openDoorIfClosed();
+  void closeDoorIfOpen();
 
   HangarState state;
 
   long stateTimestamp;
   bool justEntered;
+  unsigned long conditionStartTime;
 
   PresenceSensor *pPresenceSensor;
   ProximitySensor *pProximitySensor;
