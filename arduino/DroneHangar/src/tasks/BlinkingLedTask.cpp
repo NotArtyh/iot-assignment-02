@@ -5,13 +5,13 @@
 
 #define BLINK_HALF_PERIOD 250
 
-BlinkingTask::BlinkingTask(Led *pActionLed, Context *pContext) : pContext(pContext), pActionLed(pActionLed)
+BlinkingLedTask::BlinkingLedTask(Led *pActionLed, Context *pContext) : pContext(pContext), pActionLed(pActionLed)
 {
     this->stateTimestamp = 0;
     setState(IDLE);
 }
 
-void BlinkingTask::tick()
+void BlinkingLedTask::tick()
 {
     // Lampeggia se stiamo decollando o atterrando
     bool shouldBlink = pContext->isTakingOff() || pContext->isLanding();
@@ -67,19 +67,19 @@ void BlinkingTask::tick()
     }
 }
 
-void BlinkingTask::setState(BlinkState s)
+void BlinkingLedTask::setState(BlinkState s)
 {
     state = s;
     stateTimestamp = millis();
     justEntered = true;
 }
 
-long BlinkingTask::elapsedTimeInState()
+long BlinkingLedTask::elapsedTimeInState()
 {
     return millis() - stateTimestamp;
 }
 
-bool BlinkingTask::checkAndSetJustEntered()
+bool BlinkingLedTask::checkAndSetJustEntered()
 {
     bool bak = justEntered;
     if (justEntered)

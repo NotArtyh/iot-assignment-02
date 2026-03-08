@@ -1,4 +1,4 @@
-#ifndef __BLINKING_TASK__
+#ifndef __BLINKING_LED_TASK__
 #define __BLINKING_TASK__
 
 #include "kernel/Task.h"
@@ -6,11 +6,11 @@
 #include "devices/Led.h"
 #include <Arduino.h>
 
-class BlinkingTask : public Task
+class BlinkingLedTask : public Task
 {
 
 public:
-  BlinkingTask(Led *pActionLed, Context *pContext);
+  BlinkingLedTask(Led *pActionLed, Context *pContext);
   void tick();
 
 private:
