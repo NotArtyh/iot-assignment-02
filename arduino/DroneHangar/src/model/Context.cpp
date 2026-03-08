@@ -1,30 +1,61 @@
 #include "Context.h"
 
-Context::Context(){
-  started = false;
-  stopped = false;
+Context::Context()
+{
+  takingOff = false;
+  landing = false;
+  alarm = false;
 }
 
-bool Context::isStarted(){
-  return started;
+// --- SETTERS ---
+
+void Context::setIdleInside()
+{
+  takingOff = false;
+  landing = false;
 }
 
-bool Context::isStopped(){
-  return stopped;
+void Context::setTakingOff()
+{
+  takingOff = true;
+  landing = false;
 }
 
-void Context::setStarted(){
-  started = true;
-  stopped = false;
+void Context::setOutside()
+{
+  takingOff = false;
+  landing = false;
 }
 
-void Context::setStopped(){
-  stopped = true;
-  started = false;
+void Context::setLanding()
+{
+  takingOff = false;
+  landing = true;
 }
 
-void Context::reset(){
-  started = false;
-  stopped = false;
+void Context::setAlarm()
+{
+  alarm = true;
 }
 
+void Context::clearAlarm()
+{
+  alarm = false;
+}
+
+// --- GETTERS ---
+
+bool Context::isTakingOff()
+{
+  return takingOff;
+}
+
+bool Context::isLanding()
+{
+  return landing;
+}
+
+bool Context::isAlarming()
+{
+  return alarm;
+}

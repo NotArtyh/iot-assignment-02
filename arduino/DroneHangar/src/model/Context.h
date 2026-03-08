@@ -1,22 +1,27 @@
 #ifndef __CONTEXT__
 #define __CONTEXT__
 
-class Context {
+class Context
+{
 
 public:
   Context();
 
-  void setStarted();
-  void setStopped();
+  void setIdleInside();
+  void setTakingOff();
+  void setOutside();
+  void setLanding();
+  void setAlarm();
+  void clearAlarm(); // Per il pulsante RESET
 
-  bool isStarted();  
-  bool isStopped();
-  void reset();
+  bool isTakingOff();
+  bool isLanding();
+  bool isAlarming();
 
 private:
-
-  bool started; 
-  bool stopped;
+  bool takingOff;
+  bool landing;
+  bool alarm;
 };
 
 #endif
