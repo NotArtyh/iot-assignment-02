@@ -7,10 +7,13 @@ class Context
 public:
   Context();
 
+  // MainHangarTask setters
   void setIdleInside();
   void setTakingOff();
   void setOutside();
   void setLanding();
+
+  // TemperatureAlarmTask setters
   void setAlarm();
   void clearAlarm(); // Per il pulsante RESET
 
