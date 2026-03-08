@@ -6,25 +6,33 @@
 #include "devices/Led.h"
 #include <Arduino.h>
 
-class BlinkingTask: public Task {
+class BlinkingTask : public Task
+{
 
 public:
-  BlinkingTask(Led* pLed, Context* pContext); 
+  BlinkingTask(Led *pLed, Context *pContext);
   void tick();
 
-private:  
-  void setState(int state);
+private:
+  enum BlinkState
+  {
+    IDLE,
+    BLINK_OFF,
+    BLINK_ON
+  };
+
+  void setState(BlinkState newState);
   long elapsedTimeInState();
-  void log(const String& msg);
-  
+  void log(const String &msg);
+
   bool checkAndSetJustEntered();
-  
-  enum { IDLE, OFF, ON } state;
+
+  BlinkState state;
   long stateTimestamp;
   bool justEntered;
 
-  Led* pLed;
-  Context* pContext;
+  Led *pActionLed;
+  Context *pContext;
 };
 
 #endif
