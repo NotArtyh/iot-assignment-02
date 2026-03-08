@@ -28,111 +28,115 @@ void MainHangarTask::tick()
     switch (state)
     {
     case IDLE_INSIDE:
-    {
-        if (this->checkAndSetJustEntered())
+        pContext->setIdleInside();
         {
-            Logger.log(F("[MHT] IDLE_INSIDE"));
-            closeDoorIfOpen();
-            pStaticLed->switchOn();
-            Logger.log(F("[LED] ON"));
-            pDisplay->showMessage("DRONE INSIDE");
-        }
-        // Transition condition: take-off command received and no alarm
-        /* if (takeOffCommandReceived() && !isAlarming())
-        {
-            setState(TAKING_OFF);
-        } */
+            if (this->checkAndSetJustEntered())
+            {
+                Logger.log(F("[MHT] IDLE_INSIDE"));
+                closeDoorIfOpen();
+                pStaticLed->switchOn();
+                Logger.log(F("[LED] ON"));
+                pDisplay->showMessage("DRONE INSIDE");
+            }
+            // Transition condition: take-off command received and no alarm
+            /* if (takeOffCommandReceived() && !isAlarming())
+            {
+                setState(TAKING_OFF);
+            } */
 
-        break;
-    }
+            break;
+        }
     case TAKING_OFF:
-    {
-        if (this->checkAndSetJustEntered())
+        pContext->setTakingOff();
         {
-            Logger.log(F("[MHT] TAKING_OFF"));
-            openDoorIfClosed();
-            pDisplay->showMessage("TAKING OFF");
-            // AZZERA il timer SOLO quando entri in questo stato per la prima volta
-            conditionStartTime = 0;
-        }
-
-        // LED2 BLINKING
-
-        // Transition condition: drone has taken off
-        float currentDistance = pProximitySensor->getDistance();
-        if (currentDistance > TAKE_OFF_DISTANCE)
-        {
-            // Se supera la soglia per la prima volta, fai partire il cronometro
-            if (conditionStartTime == 0)
+            if (this->checkAndSetJustEntered())
             {
-                conditionStartTime = millis();
+                Logger.log(F("[MHT] TAKING_OFF"));
+                openDoorIfClosed();
+                pDisplay->showMessage("TAKING OFF");
+                // AZZERA il timer SOLO quando entri in questo stato per la prima volta
+                conditionStartTime = 0;
             }
-            // Se è sopra la soglia e il tempo T1 è trascorso
-            else if (millis() - conditionStartTime >= T1)
+
+            // LED2 BLINKING
+
+            // Transition condition: drone has taken off
+            float currentDistance = pProximitySensor->getDistance();
+            if (currentDistance > TAKE_OFF_DISTANCE)
             {
-                Logger.log(F("[MHT] Drone departed. Moving to OUTSIDE."));
-                setState(OUTSIDE);
+                // Se supera la soglia per la prima volta, fai partire il cronometro
+                if (conditionStartTime == 0)
+                {
+                    conditionStartTime = millis();
+                }
+                // Se è sopra la soglia e il tempo T1 è trascorso
+                else if (millis() - conditionStartTime >= T1)
+                {
+                    Logger.log(F("[MHT] Drone departed. Moving to OUTSIDE."));
+                    setState(OUTSIDE);
+                }
             }
+            else
+            {
+                // Se la distanza scende sotto TAKE_OFF_DISTANCE prima dello scadere di T1, azzera tutto
+                conditionStartTime = 0;
+            }
+            break;
         }
-        else
-        {
-            // Se la distanza scende sotto TAKE_OFF_DISTANCE prima dello scadere di T1, azzera tutto
-            conditionStartTime = 0;
-        }
-        break;
-    }
     case OUTSIDE:
-    {
-        if (this->checkAndSetJustEntered())
+        pContext->setOutside();
         {
-            Logger.log(F("[MHT] OUTSIDE"));
-            closeDoorIfOpen();
-            pDisplay->showMessage("DRONE OUTSIDE");
+            if (this->checkAndSetJustEntered())
+            {
+                Logger.log(F("[MHT] OUTSIDE"));
+                closeDoorIfOpen();
+                pDisplay->showMessage("DRONE OUTSIDE");
+            }
+
+            // LED2 OFF
+
+            // Transition condition: drone is landingand no alarm
+
+            /* if (landingCommandReceived() && !isAlarming() && pPresenceSensor->isDetected())
+            {
+                setState(LANDING);
+            } */
+            break;
         }
-
-        // LED2 OFF
-
-        // Transition condition: drone is landingand no alarm
-
-        /* if (landingCommandReceived() && !isAlarming() && pPresenceSensor->isDetected())
-        {
-            setState(LANDING);
-        } */
-        break;
-    }
     case LANDING:
-    {
-        if (this->checkAndSetJustEntered())
+        pContext->setLanding();
         {
-            Logger.log(F("[MHT] LANDING"));
-            openDoorIfClosed();
-            pDisplay->showMessage("LANDING");
-            conditionStartTime = 0;
-        }
-        // led2 blinking
+            if (this->checkAndSetJustEntered())
+            {
+                Logger.log(F("[MHT] LANDING"));
+                openDoorIfClosed();
+                pDisplay->showMessage("LANDING");
+                conditionStartTime = 0;
+            }
+            // led2 blinking
 
-        // Transition condition: drone has landed
-        float currentDistance = pProximitySensor->getDistance();
-        if (currentDistance < LANDING_DISTANCE)
-        {
-            // Se supera la soglia per la prima volta, fai partire il cronometro
-            if (conditionStartTime == 0)
+            // Transition condition: drone has landed
+            float currentDistance = pProximitySensor->getDistance();
+            if (currentDistance < LANDING_DISTANCE)
             {
-                conditionStartTime = millis();
+                // Se supera la soglia per la prima volta, fai partire il cronometro
+                if (conditionStartTime == 0)
+                {
+                    conditionStartTime = millis();
+                }
+                else if (millis() - conditionStartTime >= T2)
+                {
+                    Logger.log(F("[MHT] Drone landed. Moving to IDLE_INSIDE."));
+                    setState(IDLE_INSIDE);
+                }
             }
-            else if (millis() - conditionStartTime >= T2)
+            else
             {
-                Logger.log(F("[MHT] Drone landed. Moving to IDLE_INSIDE."));
-                setState(IDLE_INSIDE);
+                // Se la distanza scende sotto LANDING_DISTANCE prima dello scadere di T2, azzera tutto
+                conditionStartTime = 0;
             }
+            break;
         }
-        else
-        {
-            // Se la distanza scende sotto LANDING_DISTANCE prima dello scadere di T2, azzera tutto
-            conditionStartTime = 0;
-        }
-        break;
-    }
     }
 }
 
