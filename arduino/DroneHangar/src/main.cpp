@@ -38,7 +38,7 @@ void setup()
   /*Task *pTemperatureAlarmTask = new TemperatureAlarmTask();*/
 
   sched.addTask(pMainHangarTask);
-  // sched.addTask(pBlinkingTask);
+  sched.addTask(pBlinkingLedTask);
   // sched.addTask(pTemperatureAlarmTask());
 #endif
 }
