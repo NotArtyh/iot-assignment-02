@@ -58,8 +58,6 @@ void MainHangarTask::tick()
                 conditionStartTime = 0;
             }
 
-            // LED2 BLINKING
-
             // Transition condition: drone has taken off
             float currentDistance = pProximitySensor->getDistance();
             if (currentDistance > TAKE_OFF_DISTANCE)
@@ -92,9 +90,6 @@ void MainHangarTask::tick()
                 closeDoorIfOpen();
                 pDisplay->showMessage("DRONE OUTSIDE");
             }
-
-            // LED2 OFF
-
             // Transition condition: drone is landingand no alarm
 
             /* if (landingCommandReceived() && !isAlarming() && pPresenceSensor->isDetected())
@@ -113,7 +108,6 @@ void MainHangarTask::tick()
                 pDisplay->showMessage("LANDING");
                 conditionStartTime = 0;
             }
-            // led2 blinking
 
             // Transition condition: drone has landed
             float currentDistance = pProximitySensor->getDistance();
