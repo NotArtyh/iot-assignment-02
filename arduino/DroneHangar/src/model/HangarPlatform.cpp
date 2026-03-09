@@ -1,7 +1,10 @@
 #include "HangarPlatform.h"
 #include <Arduino.h>
+
 #include "kernel/MsgService.h"
+#include "kernel/Logger.h"
 #include "config.h"
+
 #include "devices/Led.h"
 #include "devices/DisplayLcd.h"
 #include "devices/HangarDoor.h"
@@ -9,7 +12,6 @@
 #include "devices/Sonar.h"
 #include "devices/Pir.h"
 #include "devices/TempSensor.h"
-#include "kernel/Logger.h"
 
 void wakeUp() {}
 
