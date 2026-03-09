@@ -13,18 +13,24 @@ public:
   void setOutside();
   void setLanding();
 
-  // TemperatureAlarmTask setters
+  //  AlarmTask setters
+  void setPreAlarm();
+  void clearPreAlarm();
   void setAlarm();
-  void clearAlarm(); // Per il pulsante RESET
+  void clearAlarm();
 
+  bool isPreAlarming();
+  bool isAlarming();
   bool isTakingOff();
   bool isLanding();
-  bool isAlarming();
+  bool isOutside();
 
 private:
+  bool preAlarm;
+  bool alarm;
   bool takingOff;
   bool landing;
-  bool alarm;
+  bool outside;
 };
 
 #endif

@@ -5,6 +5,8 @@ Context::Context()
   takingOff = false;
   landing = false;
   alarm = false;
+  preAlarm = false;
+  outside = false;
 }
 
 // --- SETTERS ---
@@ -33,9 +35,21 @@ void Context::setLanding()
   landing = true;
 }
 
+// --- ALARM SETTERS ---
+
 void Context::setAlarm()
 {
   alarm = true;
+}
+
+void Context::setPreAlarm()
+{
+  preAlarm = true;
+}
+
+void Context::clearPreAlarm()
+{
+  preAlarm = false;
 }
 
 void Context::clearAlarm()
@@ -44,6 +58,16 @@ void Context::clearAlarm()
 }
 
 // --- GETTERS ---
+
+bool Context::isPreAlarming()
+{
+  return preAlarm;
+}
+
+bool Context::isAlarming()
+{
+  return alarm;
+}
 
 bool Context::isTakingOff()
 {
@@ -55,7 +79,7 @@ bool Context::isLanding()
   return landing;
 }
 
-bool Context::isAlarming()
+bool Context::isOutside()
 {
-  return alarm;
+  return outside;
 }
