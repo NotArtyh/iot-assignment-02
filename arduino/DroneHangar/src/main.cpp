@@ -10,6 +10,7 @@
 #include "tasks/MainHangarTask.h"
 #include "tasks/BlinkingLedTask.h"
 #include "tasks/AlarmTask.h"
+#include "tasks/SerialTask.h"
 
 Scheduler sched;
 
@@ -35,10 +36,13 @@ void setup()
   pBlinkingLedTask->init(100);
   Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getLcd(), pHangarPlatform->getHangarDoor(), pContext);
   pAlarmTask->init(100);
+  Task *pSerialTask = new SerialTask(pContext);
+  pSerialTask->init(100);
 
   sched.addTask(pMainHangarTask);
   sched.addTask(pBlinkingLedTask);
   sched.addTask(pAlarmTask);
+  sched.addTask(pSerialTask);
 #endif
 }
 
