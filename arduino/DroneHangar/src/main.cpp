@@ -9,9 +9,7 @@
 
 #include "tasks/MainHangarTask.h"
 #include "tasks/BlinkingLedTask.h"
-#include "tasks/TemperatureAlarmTask.h"
-
-// #define __TESTING_HW__
+#include "tasks/AlarmTask.h"
 
 Scheduler sched;
 
@@ -35,11 +33,12 @@ void setup()
   pMainHangarTask->init(50);
   Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
   pBlinkingLedTask->init(100);
-  /*Task *pTemperatureAlarmTask = new TemperatureAlarmTask();*/
+  Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getLcd(), pHangarPlatform->getHangarDoor(), pContext);
+  pAlarmTask->init(100);
 
   sched.addTask(pMainHangarTask);
   sched.addTask(pBlinkingLedTask);
-  // sched.addTask(pTemperatureAlarmTask());
+  sched.addTask(pAlarmTask);
 #endif
 }
 
