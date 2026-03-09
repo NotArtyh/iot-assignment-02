@@ -1,6 +1,5 @@
 #include "BlinkingLedTask.h"
 #include <Arduino.h>
-#include "config.h"
 #include "kernel/Logger.h"
 
 #define BLINK_HALF_PERIOD 250
