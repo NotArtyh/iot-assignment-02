@@ -3,15 +3,13 @@
 
 #include "Arduino.h"
 
+class LoggerService
+{
 
-class LoggerService {
-    
-public: 
-  
-  void log(const String& msg);
+public:
+  void log(const String &msg);
 };
 
 extern LoggerService Logger;
 
 #endif
-

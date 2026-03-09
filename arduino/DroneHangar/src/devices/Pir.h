@@ -3,9 +3,10 @@
 
 #include "PresenceSensor.h"
 
-class Pir: public PresenceSensor {
- 
-public: 
+class Pir : public PresenceSensor
+{
+
+public:
   Pir(int pin);
   bool isDetected();
   void calibrate();
@@ -13,14 +14,13 @@ public:
   void sync();
   long getLastSyncTime();
 
-protected: 
+protected:
   void updateSyncTime(long time);
 
 private:
   long lastTimeSync;
   int pin;
   bool detected;
-  
 };
 
 #endif
