@@ -7,9 +7,29 @@ Context::Context()
   alarm = false;
   preAlarm = false;
   outside = false;
+  currentDistance = 0.0;
+  takeOffCommand = false;
+  landCommand = false;
+}
+
+// --- SERIAL TASK SETTER ---
+
+void Context::setTakeOffCommand()
+{
+  takeOffCommand = true;
+}
+
+void Context::setLandCommand()
+{
+  landCommand = true;
 }
 
 // --- SETTERS ---
+
+void Context::setCurrentDistance(float dist)
+{
+  currentDistance = dist;
+}
 
 void Context::setIdleInside()
 {
@@ -59,6 +79,11 @@ void Context::clearAlarm()
 
 // --- GETTERS ---
 
+float Context::getCurrentDistance()
+{
+  return currentDistance;
+}
+
 bool Context::isPreAlarming()
 {
   return preAlarm;
@@ -82,4 +107,14 @@ bool Context::isLanding()
 bool Context::isOutside()
 {
   return outside;
+}
+
+bool Context::isTakeOffCommanded()
+{
+  return takeOffCommand;
+}
+
+bool Context::isLandCommanded()
+{
+  return landCommand;
 }

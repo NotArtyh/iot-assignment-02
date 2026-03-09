@@ -37,7 +37,7 @@ void MainHangarTask::tick()
                 pDisplay->showMessage("DRONE INSIDE");
             }
             // Transition condition: take-off command received and no prealarm
-            if (/* takeOffCommandReceived()  &&*/ (!pContext->isPreAlarming()))
+            if (pContext->isTakeOffCommanded() && (!pContext->isPreAlarming()))
             {
                 setState(TAKING_OFF);
             }
@@ -58,6 +58,7 @@ void MainHangarTask::tick()
 
             // Transition condition: drone has taken off
             float currentDistance = pProximitySensor->getDistance();
+            pContext->setCurrentDistance(currentDistance);
             if (currentDistance > TAKE_OFF_DISTANCE)
             {
                 // Se supera la soglia per la prima volta, fai partire il cronometro
@@ -90,7 +91,7 @@ void MainHangarTask::tick()
             }
             // Transition condition: drone is landingand no alarm
 
-            if (/* landingCommandReceived() && */ !pContext->isPreAlarming() && pPresenceSensor->isDetected())
+            if (pContext->isLandCommanded() && !pContext->isPreAlarming() && pPresenceSensor->isDetected())
             {
                 setState(LANDING);
             }
@@ -109,6 +110,7 @@ void MainHangarTask::tick()
 
             // Transition condition: drone has landed
             float currentDistance = pProximitySensor->getDistance();
+            pContext->setCurrentDistance(currentDistance);
             if (currentDistance < LANDING_DISTANCE)
             {
                 // Se supera la soglia per la prima volta, fai partire il cronometro

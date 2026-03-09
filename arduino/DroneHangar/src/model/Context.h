@@ -7,6 +7,14 @@ class Context
 public:
   Context();
 
+  /* Ho bisogno di queste perchè voglio rendere SerialTask completamnente indipendente dal modello dei device
+  quindi siccome devo displayare la distanza anche in SerialTask per poterla inviare alla GUI,
+  ho bisogno di un modo per far arrivare la distanza letta dal ProximitySensor a SerialTask senza dover
+  includere il ProximitySensor stesso in SerialTask (per mantenere l'indipendenza).
+    Quindi Context funge da "ponte" per trasportare questa informazione. */
+  void setCurrentDistance(float dist);
+  float getCurrentDistance();
+
   // MainHangarTask setters
   void setIdleInside();
   void setTakingOff();
@@ -25,12 +33,22 @@ public:
   bool isLanding();
   bool isOutside();
 
+  // SerialTask setters/getters
+  void setTakeOffCommand();
+  void setLandCommand();
+
+  bool isTakeOffCommanded();
+  bool isLandCommanded();
+
 private:
+  float currentDistance;
   bool preAlarm;
   bool alarm;
   bool takingOff;
   bool landing;
   bool outside;
+  bool takeOffCommand;
+  bool landCommand;
 };
 
 #endif
