@@ -61,25 +61,29 @@ void MainHangarTask::tick()
             pContext->setCurrentDistance(currentDistance);
             if (currentDistance > TAKE_OFF_DISTANCE)
             {
-                // Se supera la soglia per la prima volta, fai partire il cronometro
-                if (conditionStartTime == 0)
-                {
-                    conditionStartTime = millis();
-                }
-                // Se è sopra la soglia e il tempo T1 è trascorso
-                else if (millis() - conditionStartTime >= T1)
-                {
-                    Logger.log(F("[MHT] Drone departed. Moving to OUTSIDE."));
-                    setState(OUTSIDE);
-                }
-            }
-            else
-            {
-                // Se la distanza scende sotto TAKE_OFF_DISTANCE prima dello scadere di T1, azzera tutto
-                conditionStartTime = 0;
+                setState(CHECK_TAKING_OFF);
             }
             break;
         }
+
+    case CHECK_TAKING_OFF:
+    {
+        float currentDistance = pProximitySensor->getDistance();
+        pContext->setCurrentDistance(currentDistance);
+        Logger.log(F("[CHECK_TAKING_OFF] ENTERED"));
+
+        if (currentDistance < TAKE_OFF_DISTANCE)
+        {
+            Logger.log(F("[CHECK_TAKING_OFF] EXIT: TAKE OFF ABORTED"));
+            setState(IDLE_INSIDE);
+        }
+        else if (elapsedTimeInState() >= T1)
+        {
+            setState(OUTSIDE);
+        }
+        break;
+    }
+
     case OUTSIDE:
         pContext->setOutside();
         {
@@ -113,24 +117,28 @@ void MainHangarTask::tick()
             pContext->setCurrentDistance(currentDistance);
             if (currentDistance < LANDING_DISTANCE)
             {
-                // Se supera la soglia per la prima volta, fai partire il cronometro
-                if (conditionStartTime == 0)
-                {
-                    conditionStartTime = millis();
-                }
-                else if (millis() - conditionStartTime >= T2)
-                {
-                    Logger.log(F("[MHT] Drone landed. Moving to IDLE_INSIDE."));
-                    setState(IDLE_INSIDE);
-                }
-            }
-            else
-            {
-                // Se la distanza scende sotto LANDING_DISTANCE prima dello scadere di T2, azzera tutto
-                conditionStartTime = 0;
+                setState(CHECK_LANDING);
             }
             break;
         }
+
+    case CHECK_LANDING:
+    {
+        float currentDistance = pProximitySensor->getDistance();
+        pContext->setCurrentDistance(currentDistance);
+        Logger.log(F("[CHECK_LANDING] ENTERED"));
+
+        if (currentDistance > LANDING_DISTANCE)
+        {
+            Logger.log(F("[CHECK_LANDING] EXIT: LANDING ABORTED"));
+            setState(OUTSIDE);
+        }
+        else if (elapsedTimeInState() >= T2)
+        {
+            setState(IDLE_INSIDE);
+        }
+        break;
+    }
     }
 }
 

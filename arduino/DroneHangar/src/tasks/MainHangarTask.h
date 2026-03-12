@@ -23,8 +23,10 @@ private:
   {
     IDLE_INSIDE,
     TAKING_OFF,
+    CHECK_TAKING_OFF,
     OUTSIDE,
-    LANDING
+    LANDING,
+    CHECK_LANDING
   };
 
   void setState(HangarState newState);
