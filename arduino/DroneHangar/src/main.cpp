@@ -30,18 +30,18 @@ void setup()
 #ifndef __TESTING_HW__
   pContext = new Context();
 
-  Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getHangarDoor(), pContext);
+  Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getHangarDoor(), pContext);
   pMainHangarTask->init(50);
   Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
   pBlinkingLedTask->init(100);
-  Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getLcd(), pHangarPlatform->getHangarDoor(), pContext);
-  pAlarmTask->init(100);
+  Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getHangarDoor(), pContext);
+  pAlarmTask->init(2000);
   Task *pSerialTask = new SerialTask(pContext);
   pSerialTask->init(100);
 
   sched.addTask(pMainHangarTask);
   sched.addTask(pBlinkingLedTask);
-  sched.addTask(pAlarmTask);
+  // sched.addTask(pAlarmTask);
   sched.addTask(pSerialTask);
 #endif
 }

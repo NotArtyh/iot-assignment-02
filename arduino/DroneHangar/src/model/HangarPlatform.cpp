@@ -23,15 +23,15 @@ HangarPlatform::HangarPlatform()
   pAlarmLed = new Led(LED_PIN3);
   pSonar = new Sonar(SONAR_ECHO_PIN, SONAR_TRIG_PIN, SONAR_TIMEOUT);
   pPir = new Pir(PIR_PIN);
-  pLcd = new DisplayLcd(LCD_I2C_ADDRESS, LCD_COLS, LCD_ROWS);
+  pDisplayLcd = new DisplayLcd(LCD_I2C_ADDRESS, LCD_COLS, LCD_ROWS);
   pHangarDoor = new HangarDoor(MOTOR_PIN);
   pTempSensor = new TempSensor(TEMP_SENSOR_PIN);
 }
 
 void HangarPlatform::init()
 {
-  pLcd->init();
-  pSonar->setTemperature(pTempSensor->getTemperature()); // oppure teniamo 20° di default, ma così è più realistico
+  pDisplayLcd->init();
+  pSonar->setTemperature(20.0); // oppure teniamo 20° di default, ma così è più realistico
   Logger.log("HangarPlatform initialized");
 }
 
@@ -68,9 +68,9 @@ Pir *HangarPlatform::getPir()
 {
   return this->pPir;
 }
-DisplayLcd *HangarPlatform::getLcd()
+DisplayLcd *HangarPlatform::getDisplayLcd()
 {
-  return this->pLcd;
+  return this->pDisplayLcd;
 }
 
 TempSensor *HangarPlatform::getTempSensor()

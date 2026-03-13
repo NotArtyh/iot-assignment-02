@@ -1,21 +1,30 @@
-#include "Arduino.h"
 #include "TempSensor.h"
 
-TempSensor::TempSensor(int pin) : pin(pin)
+// Inizializza le variabili e l'oggetto dht specificando il tipo (DHT11)
+TempSensor::TempSensor(uint8_t pin) : pin(pin), dht(pin, DHT11)
 {
-    pinMode(pin, INPUT);
+    // È meglio non fare operazioni hardware (come i pinMode o dht.begin)
+    // direttamente nel costruttore in C++ per Arduino.
+    // Lo faremo nel metodo begin().
+}
+
+void TempSensor::begin()
+{
+    // Avvia la comunicazione con il DHT11
+    dht.begin();
 }
 
 float TempSensor::getTemperature()
 {
-    // 1. Legge il valore grezzo (0 - 1023)
-    int rawValue = analogRead(pin);
+    // La libreria legge i dati digitali e fa la conversione in automatico
+    float temperatureC = dht.readTemperature();
 
-    // 2. Converte in Tensione (assumendo 5V di alimentazione)
-    float voltage = rawValue * (5.0 / 1023.0);
-
-    // 3. Converte in Temperatura (°C) - formula per LM35
-    float temperatureC = voltage * 100.0;
+    // Buona pratica: controlla se la lettura è fallita (restituisce NaN - Not a Number)
+    if (isnan(temperatureC))
+    {
+        Serial.println("Errore nella lettura del sensore DHT!");
+        return -999.0; // Restituisce un valore di errore evidente
+    }
 
     return temperatureC;
 }

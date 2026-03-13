@@ -2,14 +2,21 @@
 #define TEMP_SENSOR_H
 
 #include <Arduino.h>
+#include <DHT.h> // Includi la libreria per il DHT
 
 class TempSensor
 {
 private:
-    int pin;
+    uint8_t pin;
+    DHT dht; // Dichiariamo l'oggetto dht
 
 public:
-    TempSensor(int pin);
+    // Il costruttore ora ha bisogno di sapere il pin (il tipo di default è DHT11)
+    TempSensor(uint8_t pin);
+
+    // Metodo necessario per avviare il sensore nel setup()
+    void begin();
+
     float getTemperature();
 };
 

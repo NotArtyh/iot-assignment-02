@@ -24,7 +24,7 @@ public:
   HangarDoor *getHangarDoor();
   Sonar *getSonar();
   Pir *getPir();
-  DisplayLcd *getLcd();
+  DisplayLcd *getDisplayLcd();
   TempSensor *getTempSensor();
 
 private:
@@ -35,7 +35,7 @@ private:
   HangarDoor *pHangarDoor;
   Sonar *pSonar;
   Pir *pPir;
-  DisplayLcd *pLcd;
+  DisplayLcd *pDisplayLcd;
   TempSensor *pTempSensor;
 };
 
