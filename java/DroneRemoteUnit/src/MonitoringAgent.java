@@ -1,4 +1,4 @@
-package DroneRemoteUnit.src;
+package DroneRemoteUnit;
 
 public class MonitoringAgent extends Thread {
 

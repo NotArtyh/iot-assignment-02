@@ -1,4 +1,4 @@
-package DroneRemoteUnit.src;
+package DroneRemoteUnit;
 
 /**
  * Simple interface for an async msg communication channel

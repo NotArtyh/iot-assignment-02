@@ -1,4 +1,4 @@
-package DroneRemoteUnit.src;
+package DroneRemoteUnit;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

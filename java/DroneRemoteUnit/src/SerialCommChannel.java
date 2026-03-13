@@ -1,4 +1,4 @@
-package DroneRemoteUnit.src;
+package DroneRemoteUnit;
 
 import java.util.concurrent.*;
 import jssc.*;

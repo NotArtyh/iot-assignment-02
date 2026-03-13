@@ -1,4 +1,4 @@
-package DroneRemoteUnit.src;
+package DroneRemoteUnit;
 
 import javax.swing.SwingUtilities;
 
@@ -12,7 +12,7 @@ class DashboardLauncher   {
 		if (args.length != 1){
 			System.err.println("Args: <serial port>");
 			System.exit(1);
-		}*/
+		}*/	
 
 		view = new DashboardView();
 		log = new LogView();
