@@ -11,12 +11,9 @@
 
 link uml diagrams: https://lucid.app/lucidchart/5d4fabe1-c16f-4353-b877-1f1fa4a3f847/edit?viewport_loc=-4363%2C-1797%2C10358%2C4188%2C0m8xT1A-z0s.&invitationId=inv_bbe5bf6e-1e22-4480-a804-d33e2b081425
 
-
-
 ![Classi UML](doc/svg/class-bg.svg)
 
 ![Stati UML](doc/svg/state-bg.svg)
-
 
 ## Setup and Build
 
@@ -28,5 +25,7 @@ The project has been tested and has native support for the following `i2c` displ
 Any display using the i2c protocol and supported by the `LiquidCrystal_I2C.h` library for LCDs or the `U8g2lib.h` for the OLEDs (virtually any oled display with any protocol is supported with this library) should work with minimal editing of the respective display module.
 
 To switch between the OLED and LCD configuration, set the `-D USE_OLED` build flag in the `platformio.ini` (or configure a platformio env with the corresonding flag)
+
+To build and run the java dashboard run `./build.sh` inside the `./java/DroneRemoteUnit/` dir
 
 ## Project Architecture
