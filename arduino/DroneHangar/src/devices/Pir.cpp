@@ -9,12 +9,20 @@ Pir::Pir(int pin)
 
 void Pir::sync()
 {
-  detected = digitalRead(pin) == HIGH;
   updateSyncTime(millis());
 }
 
 bool Pir::isDetected()
 {
+  if (digitalRead(pin) == HIGH)
+  {
+    detected = true;
+  }
+  else
+  {
+    detected = false;
+  }
+
   return detected;
 }
 
