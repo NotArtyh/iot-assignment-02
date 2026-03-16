@@ -1,7 +1,7 @@
 #include "TempSensor.h"
 
 // Inizializza le variabili e l'oggetto dht specificando il tipo (DHT11)
-TempSensor::TempSensor(uint8_t pin) : pin(pin), dht(pin, DHT11)
+TempSensor::TempSensor(int pin) : pin(pin), dht(pin, DHT11)
 {
     // È meglio non fare operazioni hardware (come i pinMode o dht.begin)
     // direttamente nel costruttore in C++ per Arduino.

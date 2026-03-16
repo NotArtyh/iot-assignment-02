@@ -7,12 +7,12 @@
 class TempSensor
 {
 private:
-    uint8_t pin;
+    int pin;
     DHT dht; // Dichiariamo l'oggetto dht
 
 public:
     // Il costruttore ora ha bisogno di sapere il pin (il tipo di default è DHT11)
-    TempSensor(uint8_t pin);
+    TempSensor(int pin);
 
     // Metodo necessario per avviare il sensore nel setup()
     void begin();
