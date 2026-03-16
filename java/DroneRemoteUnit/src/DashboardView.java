@@ -40,6 +40,16 @@ class DashboardView extends JFrame implements ActionListener  {
 		infoLine.add(hangarState);
 		
 		mainPanel.add(infoLine);
+		
+		JPanel distLine = new JPanel();
+		distLine.setLayout(new BoxLayout(distLine, BoxLayout.LINE_AXIS));
+		distance = new JTextField("--");
+		distance.setEditable(false);
+		distance.setPreferredSize(new Dimension(200,25));
+		distLine.add(new JLabel("Distance (cm):"));
+		distLine.add(distance);
+		
+		mainPanel.add(distLine);
 		mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
 		mainPanel.setPreferredSize(new Dimension(200,20));
 
