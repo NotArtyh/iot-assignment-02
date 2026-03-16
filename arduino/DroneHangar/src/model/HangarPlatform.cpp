@@ -31,7 +31,8 @@ HangarPlatform::HangarPlatform()
 void HangarPlatform::init()
 {
   pDisplayLcd->init();
-  pSonar->setTemperature(20.0); // oppure teniamo 20° di default, ma così è più realistico
+  pSonar->setTemperature(20.0);
+  pTempSensor->begin(); // Inizializza il sensore di temperatura
   Logger.log("HangarPlatform initialized");
 }
 
