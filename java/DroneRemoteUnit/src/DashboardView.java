@@ -28,36 +28,30 @@ class DashboardView extends JFrame implements ActionListener  {
 		
 		JPanel infoLine = new JPanel();
 		infoLine.setLayout(new BoxLayout(infoLine, BoxLayout.LINE_AXIS));
-		containerState = new JTextField("--");
-		containerState.setEditable(false);
-		containerState.setPreferredSize(new Dimension(200,15));
-		infoLine.add(new JLabel("Container State:"));
-		infoLine.add(containerState);
-		wasteLevelPercentage = new JTextField("--");
-		wasteLevelPercentage.setEditable(false);
-		wasteLevelPercentage.setPreferredSize(new Dimension(100,15));
-		infoLine.add(new JLabel("Waste Level %:"));
-		infoLine.add(wasteLevelPercentage);
-		currentTemperature = new JTextField("--");
-		currentTemperature.setEditable(false);
-		currentTemperature.setPreferredSize(new Dimension(200,15));
-		infoLine.add(new JLabel("Current Temperature:"));
-		infoLine.add(currentTemperature);
+		droneState = new JTextField("--");
+		droneState.setEditable(false);
+		droneState.setPreferredSize(new Dimension(200,25));
+		infoLine.add(new JLabel("Drone State:"));
+		infoLine.add(droneState);
+		hangarState = new JTextField("--");
+		hangarState.setEditable(false);
+		hangarState.setPreferredSize(new Dimension(200,25));
+		infoLine.add(new JLabel("Hangar State:"));
+		infoLine.add(hangarState);
 		
 		mainPanel.add(infoLine);
 		mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
 		mainPanel.setPreferredSize(new Dimension(200,20));
 
 		JPanel buttonPanel = new JPanel();
-		maintenanceDone = new JButton("Restore");
-		maintenanceDone.setEnabled(false);
-		maintenanceDone.addActionListener(this);
-		dischargeContainer = new JButton("Discharge");
-		dischargeContainer.setEnabled(false);
-		dischargeContainer.addActionListener(this);
+		takeOffButton = new JButton("TAKEOFF");
+		takeOffButton.addActionListener(this);
+		landButton = new JButton("LAND");
+		landButton.addActionListener(this);
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));	    
-		buttonPanel.add(dischargeContainer);
-		buttonPanel.add(maintenanceDone);
+		buttonPanel.add(takeOffButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		buttonPanel.add(landButton);
 		
 		mainPanel.add(buttonPanel);
 		mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
@@ -80,53 +74,34 @@ class DashboardView extends JFrame implements ActionListener  {
 		this.controller = contr;
 	}
 
-	public void setContainerState(String msg){
+	public void setDroneState(String state){
 		SwingUtilities.invokeLater(() -> {
-			containerState.setText(msg); 
+			droneState.setText(state); 
 		});
 	}
 
-	public void setWasteLevel(int perc){
+	public void setHangarState(String state){
 		SwingUtilities.invokeLater(() -> {
-			wasteLevelPercentage.setText("" + perc);
+			hangarState.setText(state);
 		});
 	}
 
-	public void setCurrentTemperature(double temp){
+	public void setDistance(double dist){
 		SwingUtilities.invokeLater(() -> {
-			currentTemperature.setText("" + temp);
-		});
-	}
-
-	public void enableAvailable() {
-		SwingUtilities.invokeLater(() -> {
-			maintenanceDone.setEnabled(false);
-			dischargeContainer.setEnabled(false);
-		});
-	}
-	
-	public void enableMaintenance() {
-		SwingUtilities.invokeLater(() -> {
-			maintenanceDone.setEnabled(true);
-			dischargeContainer.setEnabled(false);
-		});
-	}
-
-	public void enableDischarge() {
-		SwingUtilities.invokeLater(() -> {
-			maintenanceDone.setEnabled(false);
-			dischargeContainer.setEnabled(true);
+			if (dist < 0) {
+				distance.setText("--");
+			} else {
+				distance.setText(String.format("%.1f", dist));
+			}
 		});
 	}
 	
 	public void actionPerformed(ActionEvent ev){
 		  try {
-			  if (ev.getSource() == maintenanceDone){
-				  controller.notifyMaintenanceDone();
-				  maintenanceDone.setEnabled(false);
-			  } else if (ev.getSource() == dischargeContainer){
-				  controller.notifyDischarge();
-				  dischargeContainer.setEnabled(false);
+			  if (ev.getSource() == takeOffButton){
+				  controller.notifyTakeOff();
+			  } else if (ev.getSource() == landButton){
+				  controller.notifyLand();
 			  } 
 		  } catch (Exception ex){
 			  ex.printStackTrace();
