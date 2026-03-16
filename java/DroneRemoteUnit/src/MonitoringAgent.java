@@ -6,16 +6,6 @@ public class MonitoringAgent extends Thread {
 	DashboardView view;
 	LogView logger;
 	
-	static final String CONTAINER_PREFIX 	=  "cw:";
-	static final String LOG_PREFIX 	=  "lo:";
-	static final String MSG_STATE 		= "st:";
-	
-	static final String[] stateNames = {"Available", "Full", "Maintenance"}; 
-	static final int AVAILABLE = 0;
-	static final int FULL = 1;
-	static final int IN_MAINTENANCE = 2;
-	
-	
 	public MonitoringAgent(SerialCommChannel channel, DashboardView view, LogView log) throws Exception {
 		this.view = view;
 		this.logger = log;
