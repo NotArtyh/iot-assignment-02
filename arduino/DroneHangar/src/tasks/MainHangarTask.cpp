@@ -4,8 +4,8 @@
 
 #define T1 3000
 #define T2 4000
-#define TAKE_OFF_DISTANCE 100
-#define LANDING_DISTANCE 200
+#define TAKE_OFF_DISTANCE 0.05
+#define LANDING_DISTANCE 0.08
 
 MainHangarTask::MainHangarTask(PresenceSensor *pPresenceSensor, ProximitySensor *pProximitySensor,
                                DisplayLcd *pDisplay, Led *pStaticLed, HangarDoor *pHangarDoor, Context *pContext)
@@ -36,6 +36,7 @@ void MainHangarTask::tick()
                 Logger.log(F("[LED] ON"));
                 pDisplay->showMessage("DRONE INSIDE");
             }
+
             // Transition condition: take-off command received and no prealarm
             if (pContext->isTakeOffCommanded() && (!pContext->isPreAlarming()))
             {
