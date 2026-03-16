@@ -9,18 +9,18 @@ import javax.swing.*;
 
 class DashboardView extends JFrame implements ActionListener  {
 
-	private JButton maintenanceDone;
-	private JButton dischargeContainer;
+	private JButton takeOffButton;
+	private JButton landButton;
 	
-	private JTextField wasteLevelPercentage;
-	private JTextField currentTemperature;
+	private JTextField droneState;
+	private JTextField hangarState;
+	private JTextField distance;
 	
-	private JTextField containerState;
 	private DashboardController controller;
 	
 	public DashboardView(){
-		super(".:: Smart Waste Disposal System ::.");
-		setSize(600,150);
+		super(".:: Drone Hangar Control ::.");
+		setSize(600,200);
 		this.setResizable(false);
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
