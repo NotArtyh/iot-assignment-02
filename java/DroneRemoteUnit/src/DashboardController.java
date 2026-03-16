@@ -2,8 +2,8 @@ package DroneRemoteUnit;
 
 public class DashboardController  {
 
-	static final String MSG_MAINTENANCE_DONE 	= "ok";
-	static final String MSG_DISCHARGE 			= "di";
+	static final String MSG_TAKEOFF 	= "TAKEOFF";
+	static final String MSG_LAND 		= "LAND";
 	
 	SerialCommChannel channel;
 	DashboardView view;
@@ -13,23 +13,21 @@ public class DashboardController  {
 		this.view = view;
 		this.logger = logger;
 		
-		channel = new SerialCommChannel(port,115200);		
-		new MonitoringAgent(channel,view,logger).start();
+		channel = new SerialCommChannel(port, 115200);		
+		new MonitoringAgent(channel, view, logger).start();
 			
-		/* attesa necessaria per fare in modo che Arduino completi il reboot */
-		
 		System.out.println("Waiting Arduino for rebooting...");		
 		Thread.sleep(4000);
 		System.out.println("Ready.");		
 	
 	}
 	
-	public void notifyMaintenanceDone() {
-		  channel.sendMsg(MSG_MAINTENANCE_DONE);
+	public void notifyTakeOff() {
+		channel.sendMsg(MSG_TAKEOFF);
 	}
 
-	public void notifyDischarge() {
-		  channel.sendMsg(MSG_DISCHARGE);
+	public void notifyLand() {
+		channel.sendMsg(MSG_LAND);
 	}
 
 }
