@@ -28,7 +28,8 @@ void HangarDoor::open()
     if (!_isOpen)
     {
         motor.attach(_pin); // Accendi il motore
-        setAngle(90);       // 90 gradi per aprire
+        setAngle(0);
+        delay(1000);
         _isOpen = true;
     }
 }
@@ -37,10 +38,9 @@ void HangarDoor::close()
 {
     if (_isOpen)
     {
-        setAngle(0); // 0 gradi per chiudere
-
-        // Nota: se il motore si "stacca" prima di arrivare a 0 gradi,
-        // potresti dover aggiungere un piccolo delay(500) prima di motor.detach();
+        motor.attach(_pin);
+        setAngle(90); // 0 gradi per chiudere
+        delay(1000);
         motor.detach(); // Spegni il motore per risparmiare corrente
         _isOpen = false;
     }
