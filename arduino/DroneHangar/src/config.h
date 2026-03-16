@@ -5,7 +5,7 @@
 #define LED_PIN1 9
 #define LED_PIN2 10
 #define LED_PIN3 11
-#define MOTOR_PIN 9
+#define MOTOR_PIN 5
 #define SONAR_ECHO_PIN 12
 #define SONAR_TRIG_PIN 13
 #define SONAR_TIMEOUT 10000
