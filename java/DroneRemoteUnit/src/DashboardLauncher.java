@@ -17,7 +17,7 @@ class DashboardLauncher   {
 		view = new DashboardView();
 		log = new LogView();
 		
-		String portName = "/dev/cu.usbmodem212101";
+		String portName = "/dev/cu.usbmodem1101";
 		DashboardController contr = new DashboardController(portName,view,log);
 		view.registerController(contr);
 		

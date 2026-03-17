@@ -46,7 +46,7 @@ class DashboardView extends JFrame implements ActionListener  {
 		distance = new JTextField("--");
 		distance.setEditable(false);
 		distance.setPreferredSize(new Dimension(200,25));
-		distLine.add(new JLabel("Distance (cm):"));
+		distLine.add(new JLabel("Distance (m):"));
 		distLine.add(distance);
 		
 		mainPanel.add(distLine);
@@ -101,7 +101,7 @@ class DashboardView extends JFrame implements ActionListener  {
 			if (dist < 0) {
 				distance.setText("--");
 			} else {
-				distance.setText(String.format("%.1f", dist));
+				distance.setText(String.format("%.2f", dist));
 			}
 		});
 	}

@@ -16,7 +16,9 @@ public class MonitoringAgent extends Thread {
 		while (true){
 			try {
 				String msg = channel.receiveMsg();
-								
+				
+				this.logger.log(msg);
+				
 				if (msg.startsWith("STATE:")){
 					try {
 						String[] parts = msg.split("\\|");
@@ -43,8 +45,6 @@ public class MonitoringAgent extends Thread {
 						ex.printStackTrace();
 						System.err.println("Error parsing msg: " + msg);
 					}
-				} else {
-					this.logger.log(msg);
 				}
 			} catch (Exception ex){
 				ex.printStackTrace();
