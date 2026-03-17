@@ -25,6 +25,12 @@ float TempSensor::getTemperature()
         Serial.println("Errore nella lettura del sensore DHT!");
         return -999.0; // Restituisce un valore di errore evidente
     }
+    else
+    {
 
+        Serial.print("Temperatura letta: ");
+        Serial.print(temperatureC);
+        Serial.println(" °C");
+    }
     return temperatureC;
 }
