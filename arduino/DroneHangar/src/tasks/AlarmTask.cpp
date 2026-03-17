@@ -4,8 +4,8 @@
 #include "kernel/Logger.h"
 
 // Parametri richiesti dalla consegna
-#define TEMP1 40.0
-#define TEMP2 60.0
+#define TEMP1 22.0
+#define TEMP2 23.0
 #define T3 3000
 #define T4 3000
 
