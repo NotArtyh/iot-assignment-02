@@ -35,9 +35,9 @@ void setup()
   Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
   pBlinkingLedTask->init(200);
   Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getHangarDoor(), pContext);
-  pAlarmTask->init(1000);
+  pAlarmTask->init(100);
   Task *pSerialTask = new SerialTask(pContext);
-  pSerialTask->init(2000);
+  pSerialTask->init(500);
 
   sched.addTask(pMainHangarTask);
   sched.addTask(pBlinkingLedTask);
