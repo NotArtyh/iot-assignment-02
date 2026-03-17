@@ -36,6 +36,7 @@ public:
   // SerialTask setters/getters
   void setTakeOffCommand();
   void setLandCommand();
+  void clearCommands();
 
   bool isTakeOffCommanded();
   bool isLandCommanded();

@@ -28,6 +28,7 @@ void SerialTask::tick()
             pContext->setLandCommand();
         }
 
+        pContext->clearCommands(); // Dopo aver letto il comando, lo resetto
         delete msg;
     }
 

@@ -24,6 +24,12 @@ void Context::setLandCommand()
   landCommand = true;
 }
 
+void Context::clearCommands()
+{
+  takeOffCommand = false;
+  landCommand = false;
+}
+
 // --- SETTERS ---
 
 void Context::setCurrentDistance(float dist)
