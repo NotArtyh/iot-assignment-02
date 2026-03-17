@@ -41,24 +41,28 @@ void Context::setIdleInside()
 {
   takingOff = false;
   landing = false;
+  outside = false;
 }
 
 void Context::setTakingOff()
 {
   takingOff = true;
   landing = false;
+  outside = false;
 }
 
 void Context::setOutside()
 {
   takingOff = false;
   landing = false;
+  outside = true;
 }
 
 void Context::setLanding()
 {
   takingOff = false;
   landing = true;
+  outside = true;
 }
 
 // --- ALARM SETTERS ---
