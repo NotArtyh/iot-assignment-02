@@ -11,6 +11,7 @@ public:
 
     void open();
     void close();
+    void forceClose();
     bool isOpen();
 
 private:

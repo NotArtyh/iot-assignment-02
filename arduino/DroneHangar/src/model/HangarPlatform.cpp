@@ -31,6 +31,7 @@ HangarPlatform::HangarPlatform()
 void HangarPlatform::init()
 {
   pDisplayLcd->init();
+  pHangarDoor->forceClose();
   pSonar->setTemperature(20.0);
   pTempSensor->begin(); // Inizializza il sensore di temperatura
   Logger.log("HangarPlatform initialized");

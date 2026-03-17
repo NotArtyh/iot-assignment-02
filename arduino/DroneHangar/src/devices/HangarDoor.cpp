@@ -50,3 +50,11 @@ bool HangarDoor::isOpen()
 {
     return _isOpen;
 }
+
+void HangarDoor::forceClose() {
+    motor.attach(_pin);
+    setAngle(90); // 0 gradi per chiudere
+    delay(1000);
+    motor.detach(); // Spegni il motore per risparmiare corrente
+    _isOpen = false;
+}
