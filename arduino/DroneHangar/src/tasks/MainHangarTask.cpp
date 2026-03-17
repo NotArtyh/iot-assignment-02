@@ -2,9 +2,9 @@
 #include <Arduino.h>
 #include "kernel/Logger.h"
 
-#define T1 3000
-#define T2 4000
-#define TAKE_OFF_DISTANCE 0.05
+#define T1 1000
+#define T2 1000
+#define TAKE_OFF_DISTANCE 0.04
 #define LANDING_DISTANCE 0.08
 
 MainHangarTask::MainHangarTask(PresenceSensor *pPresenceSensor, ProximitySensor *pProximitySensor,
@@ -37,12 +37,15 @@ void MainHangarTask::tick()
                 pDisplay->showMessage("DRONE INSIDE");
             }
 
+            // float currentDistance = pProximitySensor->getDistance();
+            // pContext->setCurrentDistance(currentDistance);
+
             // Transition condition: take-off command received and no prealarm
             if (pContext->isTakeOffCommanded() && (!pContext->isPreAlarming()))
             {
                 setState(TAKING_OFF);
             }
-
+            // Serial.println(pContext->getCurrentDistance());
             break;
         }
     case TAKING_OFF:
@@ -55,6 +58,7 @@ void MainHangarTask::tick()
                 pDisplay->showMessage("TAKING OFF");
                 // AZZERA il timer SOLO quando entri in questo stato per la prima volta
                 conditionStartTime = 0;
+                pContext->clearCommands();
             }
 
             // Transition condition: drone has taken off
@@ -111,6 +115,7 @@ void MainHangarTask::tick()
                 openDoorIfClosed();
                 pDisplay->showMessage("LANDING");
                 conditionStartTime = 0;
+                pContext->clearCommands();
             }
 
             // Transition condition: drone has landed
