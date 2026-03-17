@@ -3,40 +3,33 @@
 
 #define SEND_INTERVAL 500 // Invia i dati alla GUI ogni mezzo secondo
 
-SerialTask::SerialTask(Context *pContext)
-{
+SerialTask::SerialTask(Context *pContext) {
     this->pContext = pContext;
     this->lastSendTime = 0;
 }
 
-void SerialTask::tick()
-{
+void SerialTask::tick() {
 
     // --- 1. ASCOLTO (Usando MsgService del prof) ---
-    if (MsgService.isMsgAvailable())
-    {
+    if (MsgService.isMsgAvailable()) {
         Msg *msg = MsgService.receiveMsg(); // Prende il messaggio
         String content = msg->getContent(); // Estrae la stringa
         content.trim();                     // Pulisce spazi e \n
 
-        if (content == "TAKEOFF")
-        {
+        if (content == "TAKEOFF") {
             pContext->setTakeOffCommand();
-        }
-        else if (content == "LAND")
-        {
+        } else if (content == "LAND") {
             pContext->setLandCommand();
         }
 
-        pContext->clearCommands(); // Dopo aver letto il comando, lo resetto
         delete msg;
     }
 
     // --- 2. PARLATO (Invio periodico) ---
-    // Dato che questo task girerà velocemente per leggere i messaggi in tempo reale,
-    // usiamo millis() per assicurarci di inviare lo stato solo ogni 500ms.
-    if (millis() - lastSendTime > SEND_INTERVAL)
-    {
+    // Dato che questo task girerà velocemente per leggere i messaggi in tempo
+    // reale, usiamo millis() per assicurarci di inviare lo stato solo ogni
+    // 500ms.
+    if (millis() - lastSendTime > SEND_INTERVAL) {
         lastSendTime = millis();
 
         String statusMsg = "";
@@ -58,13 +51,10 @@ void SerialTask::tick()
             statusMsg += "HANGAR:NORMAL|";
 
         // C. Distanza
-        if (pContext->isLanding() || pContext->isTakingOff())
-        {
+        if (pContext->isLanding() || pContext->isTakingOff()) {
             float dist = pContext->getCurrentDistance();
             statusMsg += "DIST:" + String(dist);
-        }
-        else
-        {
+        } else {
             statusMsg += "DIST:---";
         }
 
