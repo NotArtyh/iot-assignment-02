@@ -31,18 +31,18 @@ void setup()
   pContext = new Context();
 
   Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getHangarDoor(), pContext);
-  pMainHangarTask->init(50);
+  pMainHangarTask->init(200);
   Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
-  pBlinkingLedTask->init(100);
+  pBlinkingLedTask->init(200);
   Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getHangarDoor(), pContext);
-  pAlarmTask->init(500);
+  pAlarmTask->init(1000);
   Task *pSerialTask = new SerialTask(pContext);
-  pSerialTask->init(100);
+  pSerialTask->init(2000);
 
   sched.addTask(pMainHangarTask);
   sched.addTask(pBlinkingLedTask);
   sched.addTask(pAlarmTask);
-  // sched.addTask(pSerialTask);
+  sched.addTask(pSerialTask);
 #endif
 }
 
