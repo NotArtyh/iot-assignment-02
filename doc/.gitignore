@@ -1,0 +1,55 @@
+# =========================================
+# .gitignore per progetti LaTeX
+# =========================================
+
+# File ausiliari principali di LaTeX
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.xdv
+
+# File della bibliografia (BibTeX / Biber)
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# File di sincronizzazione e compilatori (es. latexmk, SyncTeX)
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+# File del pacchetto beamer (per le presentazioni)
+*.nav
+*.snm
+*.vrb
+
+# File generati da pacchetti specifici
+_minted*/
+svg-inkscape/
+
+# File di output finali (DVI, PS)
+*.dvi
+*.ps
+
+# =========================================
+# Nota sui file PDF
+# =========================================
+# Di default è buona norma ignorare anche i PDF generati, 
+# poiché sono il risultato di una compilazione e non codice sorgente.
+# Rimuovi il cancelletto (#) dalla riga qui sotto se vuoi ignorare i PDF:
+
+# *.pdf
