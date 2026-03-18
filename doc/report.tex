@@ -48,21 +48,22 @@ Il sottosistema locale si avvale dei seguenti componenti fisici per mappare l'am
 
 \subsection{Struttura del Sistema}
 Il firmware è strutturato in task cooperativi eseguiti da uno scheduler personalizzato. Questa scelta architetturale permette di gestire in modo non bloccante la lettura dei sensori (Sonar, PIR, Temperatura), il controllo del servomotore, l'aggiornamento dell'interfaccia LCD e la comunicazione bidirezionale tramite porta seriale con l'applicazione PC. Il comportamento logico del sistema è governato da macchine a stati finiti che valutano le transizioni in base agli input dei sensori, ai comandi ricevuti dal DRU e a specifici timeout temporali (T1, T2, T3, T4).
-
+\newpage
 \subsection{Diagrammi delle Macchine a Stati (FSM)}
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1.0\linewidth]{svg/state-bg.png}
+    \includegraphics[width=0.8\linewidth]{svg/state-bg.png}
     \caption{Diagramma della Macchina a Stati Finiti del sistema.}
     \label{fig:fsm_diagram}
 \end{figure}
 
+\newpage
 \subsection{I 4 Task Concorrenti e il loro Funzionamento}
 Il sistema è stato suddiviso in quattro task indipendenti, ognuno con una precisa responsabilità operativa (Separation of Concerns), descritti di seguito:
 
 \begin{itemize}
     \item \textbf{MainHangarTask (Logica di Movimento):} Gestisce il comportamento primario del hangar. Reagisce ai comandi (\texttt{takeOffCommand}, \texttt{landingCommand}) a condizione che non vi siano allarmi attivi. Attende le conferme spaziali e temporali dai sensori (Sonar e PIR) per completare le transizioni di stato. Si occupa inoltre di pilotare il servomotore della porta e aggiornare il display LCD.
-    \item \textbf{AlarmTask (Monitoraggio Sicurezza):} Valuta costantemente la temperatura in modo slegato dalle operazioni di volo. In caso di innalzamento termico, porta il sistema in \textit{Pre-alarm} (inibendo nuove manovre) o in \textit{Alarm} (bloccando il \texttt{MainHangarTask}, chiudendo la porta e accendendo il LED rosso L3 fino alla pressione del tasto di reset).
+    \item \textbf{AlarmTask (Monitoraggio Sicurezza):} Valuta costantemente la temperatura in modo slegato dalle operazioni di volo. In caso di innalzamento termico, porta il sistema in \textit{Pre-alarm} (inibendo nuove manovre) o in \textit{Alarm} (bloccando qualsiasi azione, chiudendo la porta e accendendo il LED rosso L3 fino alla pressione del tasto di reset).
     \item \textbf{BlinkingLedTask (Feedback Visivo):} Fa lampeggiare il LED verde L2 durante le fasi transitorie. Controlla continuamente se il sistema è in fase di decollo o atterraggio e, in caso affermativo, alterna lo stato del LED ogni 250ms, generando un periodo complessivo di 500ms.
     \item \textbf{SerialTask (I/O e Comunicazione):} Gestisce la comunicazione con l'unità remota (DRU). Ascolta i comandi in arrivo (es. \texttt{TAKEOFF}, \texttt{LAND}) e invia periodicamente (ogni 500ms) una stringa di riepilogo con lo stato aggiornato dell'hangar.
 \end{itemize}
@@ -71,7 +72,7 @@ Il sistema è stato suddiviso in quattro task indipendenti, ognuno con una preci
 L'adozione di una soluzione basata su 4 task cooperativi garantisce tre vantaggi fondamentali rispetto a un tradizionale approccio monolitico:
 \begin{enumerate}
     \item \textbf{Esecuzione non bloccante:} Evitando l'uso di funzioni bloccanti come \texttt{delay()}, lo scheduler può eseguire operazioni periodiche (come il lampeggio del LED) senza impedire al microcontrollore di continuare a leggere sensori o ascoltare la seriale.
-    \item \textbf{Affidabilità della Sicurezza:} L'\texttt{AlarmTask} viene eseguito in parallelo. Ciò assicura che il controllo termico non venga mai interrotto o ritardato dalle tempistiche meccaniche della porta o da eventuali latenze di rete.
+    \item \textbf{Affidabilità della Sicurezza:} L'\texttt{AlarmTask} viene eseguito in parallelo. Ciò assicura che il controllo termico non venga mai interrotto o ritardato dalle tempistiche meccaniche della porta o da eventuali latenze di lettura degli stati da parte della DRU.
     \item \textbf{Modularità:} La netta separazione delle logiche rende il firmware facilmente manutenibile ed espandibile.
 \end{enumerate}
 
@@ -83,12 +84,23 @@ Per far comunicare i task senza accoppiarli rigidamente, è stato implementato i
 \end{itemize}
 Questo approccio nasconde l'implementazione delle singole variabili e mantiene il sistema coerente e disaccoppiato.
 
-\subsection{Comunicazione Seriale asincrona: MsgService}
-La comunicazione con il PC avviene in modo asincrono e non bloccante grazie alla classe \texttt{MsgService}. Il meccanismo sfrutta la funzione di sistema \texttt{serialEvent()}, la quale viene chiamata automaticamente alla fine di ogni ciclo \texttt{loop()} se vi sono byte nel buffer hardware:
+\subsection{Comunicazione Seriale: DRU e Hangar}
+Il sistema di comunicazione tra la GUI su PC (DRU) e l'hardware (Hangar) si basa su un'architettura seriale bidirezionale e asincrona a 115200 baud. Il protocollo è progettato per essere rigorosamente non bloccante in entrambi gli ambienti, affidandosi al carattere terminatore di a capo (\texttt{\textbackslash n}) per identificare la fine di ogni pacchetto dati.
+
+\textbf{Lato PC (Drone Remote Unit in Java):}
+La DRU sfrutta un'architettura multi-thread per separare la ricezione dei dati dall'interfaccia grafica:
 \begin{itemize}
-    \item \textbf{Ricezione in background:} I caratteri in arrivo vengono accumulati in un buffer testuale. Quando viene rilevato il carattere terminatore di a capo (\texttt{\textbackslash n}), la stringa viene impacchettata in un oggetto \texttt{Msg} e viene alzato il flag \texttt{msgAvailable}.
-    \item \textbf{Elaborazione:} Il \texttt{SerialTask}, durante il suo normale ciclo, verifica la disponibilità del messaggio tramite \texttt{isMsgAvailable()} ed eventualmente lo processa, senza mai doversi fermare in attesa sulla seriale.
-    \item \textbf{Invio:} La funzione \texttt{sendMsg()} effettua un wrap della chiamata nativa \texttt{Serial.println()}, formattando correttamente i dati in uscita per la GUI remota.
+    \item \textbf{Invio Comandi:} Il \texttt{DashboardController} elabora gli input dell'utente e trasmette le stringhe di comando (es. \texttt{TAKEOFF}) tramite la classe \texttt{SerialCommChannel}, accodando sempre il terminatore \texttt{\textbackslash n}.
+    \item \textbf{Ricezione Asincrona:} I byte in ingresso scatenano un evento hardware (\texttt{serialEvent}). I caratteri vengono bufferizzati e, non appena viene rilevato un \texttt{\textbackslash n}, la stringa completa viene estratta e inserita in una \texttt{BlockingQueue} thread-safe.
+    \item \textbf{Elaborazione e GUI:} Un thread parallelo, il \texttt{MonitoringAgent}, preleva continuamente i messaggi dalla coda. Se rileva una stringa di telemetria (formattata con campi separati da \texttt{|}), ne effettua il parsing e aggiorna i pannelli della dashboard e il file di log senza mai bloccare il thread grafico principale (\textit{Event Dispatch Thread}).
+\end{itemize}
+
+\textbf{Lato Arduino (SerialTask e MsgService):}
+Il microcontrollore gestisce i messaggi seriali senza interrompere l'esecuzione dei task critici (come l'\texttt{AlarmTask}):
+\begin{itemize}
+    \item \textbf{Ascolto in Background:} La funzione nativa \texttt{serialEvent()} accumula i caratteri in arrivo in un buffer testuale in modo del tutto silente. Solo alla ricezione del terminatore \texttt{\textbackslash n}, la stringa viene impacchettata in un oggetto \texttt{Msg} e viene alzato il flag \texttt{msgAvailable}.
+    \item \textbf{Gestione nel Task:} Il \texttt{SerialTask}, durante il suo \textit{tick} operativo, chiama il metodo \texttt{isMsgAvailable()}. Se il flag è attivo, ritira il comando e lo inoltra al \texttt{Context} (es. impostando il flag di decollo).
+    \item \textbf{Invio Telemetria:} Ogni 500ms, il task assembla la stringa di stato (es. \texttt{STATE:...|HANGAR:...|DIST:...}) e la invia con \texttt{MsgService.sendMsg()}, la quale esegue internamente una \texttt{Serial.println()} aggiungendo automaticamente il \texttt{\textbackslash n} atteso dal PC.
 \end{itemize}
 
 \section{Note Operative}
