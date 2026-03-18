@@ -2,8 +2,8 @@
 #include <Arduino.h>
 #include "kernel/Logger.h"
 
-#define T1 1000
-#define T2 1000
+#define T1 2000
+#define T2 5000
 #define TAKE_OFF_DISTANCE 0.04
 #define LANDING_DISTANCE 0.08
 
