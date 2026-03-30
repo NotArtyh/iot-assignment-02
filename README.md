@@ -2,8 +2,6 @@
 
 > An Arduino-based smart hangar system with a Java dashboard — automated door control, temperature monitoring, and real-time drone communication over serial.
 
-![State Diagram](doc/svg/state-bg.svg)
-
 ---
 
 ## What is Smart Drone Hangar?
@@ -86,7 +84,7 @@ The Arduino firmware is designed around a **task-based architecture** with **syn
 
 ### UML Diagrams
 
-Interactive diagrams available on [LucidChart](https://lucid.app/lucidchart/5d4fabe1-c16f-4353-b877-1f1fa4a3f847/edit?viewport_loc=-4363%2C-1797%2C10358%2C4188%2C0m8xT1A-z0s.&invitationId=inv_bbe5bf6e-1e22-4480-a804-d33e2b081425).
+State UML diagram: ![State Diagram](doc/svg/state-bg.svg)
 
 ---
 
