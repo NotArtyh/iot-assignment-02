@@ -2,6 +2,7 @@
 
 > An Arduino-based smart hangar system with a Java dashboard — automated door control, temperature monitoring, and real-time drone communication over serial.
 
+![circuit-diagram](./doc/svg/assignment-2-ThinkerCad.png)
 ---
 
 ## What is Smart Drone Hangar?
