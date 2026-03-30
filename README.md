@@ -2,7 +2,6 @@
 
 > An Arduino-based smart hangar system with a Java dashboard — automated door control, temperature monitoring, and real-time drone communication over serial.
 
-![Class Diagram](doc/svg/class-bg.svg)
 ![State Diagram](doc/svg/state-bg.svg)
 
 ---
