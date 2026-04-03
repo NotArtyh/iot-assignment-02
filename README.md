@@ -83,7 +83,45 @@ The Arduino firmware is designed around a **task-based architecture** with **syn
     └── LogView.java                # Raw log panel
 ```
 
+### Task Componenti
+
+| Task | Periodo | Funzione |
+|------|---------|----------|
+| `MainHangarTask` | 200ms | Core hangar FSM (door, drone states) |
+| `BlinkingLedTask` | 200ms | L2 blink control during take-off/landing |
+| `AlarmTask` | 100ms | Temperature monitoring and alarm FSM |
+| `SerialTask` | 500ms | Serial communication with DRU |
+
+### State Machine
+
+| State | Description |
+|-------|-------------|
+| `IDLE_INSIDE` | Drone idle inside the hangar |
+| `TAKING_OFF` | Drone taking off |
+| `CHECK_TAKING_OFF` | Verify take-off complete |
+| `OUTSIDE` | Drone outside hangar |
+| `LANDING` | Drone landing |
+| `CHECK_LANDING` | Verify landing complete |
+
+### Serial Protocol
+
+| Arduino → PC | Description |
+|--------------|-------------|
+| `DIST:<distance>` | Current sonar distance |
+| `STATE:<state>` | Current drone state |
+| `ALARM:<0|1>` | Temperature alarm state |
+| `PREALARM:<0|1>` | Temperature pre-alarm state |
+| `TEMP:<temperature>` | Current temperature |
+| `DOOR:<OPEN\|CLOSED>` | Door state |
+
+| PC → Arduino | Description |
+|--------------|-------------|
+| `TAKEOFF` | Request take-off |
+| `LAND` | Request landing |
+
 ### UML Diagrams
+
+- [Lucidchart - Complete diagrams](https://lucid.app/lucidchart/5d4fabe1-c16f-4353-b877-1f1fa4a3f847)
 
 State UML diagram: ![State Diagram](doc/svg/state-bg.svg)
 
@@ -126,5 +164,5 @@ Requires Java and the bundled `jssc-2.9.4.jar` (already in `lib/`). Make sure to
 
 ## Authors
 
-- **Arthur Istvan Muller**
-- **Giuseppe Cattolico**
+- Arthur Istvan Muller (Matricola: 0001145303)
+- Giuseppe Cattolico (Matricola: 0001124318)
