@@ -164,5 +164,5 @@ Requires Java and the bundled `jssc-2.9.4.jar` (already in `lib/`). Make sure to
 
 ## Authors
 
-- Arthur Istvan Muller (Matricola: 0001145303)
-- Giuseppe Cattolico (Matricola: 0001124318)
+- Arthur Istvan Muller 
+- Giuseppe Cattolico 
