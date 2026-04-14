@@ -33,9 +33,9 @@ void setup()
   Task *pMainHangarTask = new MainHangarTask(pHangarPlatform->getPir(), pHangarPlatform->getSonar(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getStaticLed(), pHangarPlatform->getHangarDoor(), pContext);
   pMainHangarTask->init(200);
   Task *pBlinkingLedTask = new BlinkingLedTask(pHangarPlatform->getActionLed(), pContext);
-  pBlinkingLedTask->init(200);
+  pBlinkingLedTask->init(250);
   Task *pAlarmTask = new AlarmTask(pHangarPlatform->getTempSensor(), pHangarPlatform->getButton(), pHangarPlatform->getAlarmLed(), pHangarPlatform->getDisplayLcd(), pHangarPlatform->getHangarDoor(), pContext);
-  pAlarmTask->init(100);
+  pAlarmTask->init(50);
   Task *pSerialTask = new SerialTask(pContext);
   pSerialTask->init(500);
 
